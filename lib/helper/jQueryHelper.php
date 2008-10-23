@@ -2,6 +2,28 @@
 
 require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper.php');
 
+/**
+* @desc  Load jquery library in header
+* 
+*/
+
+
+sfContext::getInstance()->getResponse()->addJavascript(sfConfig::get('sf_jquery_web_dir', '/sfJqueryPlugin/js/jquery-1.2.6.min.js'), 'first');
+
+
+/**
+ * Add a jQuery Plugin on the head DOM after the jQuery call
+ * The default directory is jq/plugins/
+ *
+ * Examples:
+ *   <?php echo jq_add_plugin(array('plugin1', 'plugin2')) ?>
+ */
+function jq_add_plugin($options = array()) {
+    foreach ( $options as $o ) {
+        sfContext::getInstance ()->getResponse ()->addJavascript (sfConfig::get('sf_jquery_web_dir', '/sfJqueryPlugin/js/') .'plugins/' . $o );
+    }
+}
+         
 
 /**
    * Periodically calls the specified url ('url') every 'frequency' seconds (default is 10).
@@ -150,9 +172,10 @@ function jq_link_to_remote($name, $options = array(), $html_options = array())
    *      ))
    *   ) ?>
    */
+   
 function jq_update_element_function($element_id, $options = array())
 {
-  sfContext::getInstance()->getResponse()->addJavascript(sfConfig::get('sf_jquery_web_dir', '/js/jquery'), 'first');
+  
 
   $content = escape_javascript(isset($options['content']) ? $options['content'] : '');
 
@@ -193,9 +216,7 @@ function jq_update_element_function($element_id, $options = array())
    */
 function jq_remote_function($options)
 {
-  sfContext::getInstance()->getResponse()->addJavascript(sfConfig::get('sf_jquery_web_dir', '/js/jquery'), 'first');
-
-  // Defining elements to update
+    // Defining elements to update
   if (isset($options['update']) && is_array($options['update']))
   {
     // On success, update the element with returned data
@@ -241,7 +262,7 @@ function jq_remote_function($options)
   // Is it a form submitting
   if (isset($options['form'])) $formData = 'jQuery(this).serialize()';
   elseif (isset($options['submit'])) $formData = '{\'#'.$options['submit'].'\'}.serialize()';
-  elseif (isset($options['with'])) $formData = $options['with'];
+  elseif (isset($options['with'])) $formData = '\''.$options['with'].'\''; 
 
   // build the function
   $function = "jQuery.ajax({";
@@ -381,8 +402,7 @@ function jq_form_remote_tag($options = array(), $options_html = array())
    */
   function jq_visual_effect($effect, $element_id = false, $js_options = array())
   {
-    sfContext::getInstance()->getResponse()->addJavascript(sfConfig::get('sf_jquery_web_dir', '/js/jquery'), 'first');
-  
+     
     //format slide /fade effect name correctly.
     if(preg_match("/^(slide|fade)/i", $effect, $matches))
     {
@@ -495,14 +515,7 @@ function _update_method($position) {
 
   return $updateMethod;
 }
-
-/***  This is a wrapper for the JavascriptHelper function  ***/
-function  jq_link_to_function($name, $function, $html_options = array())  
-{
-  return link_to_function($name, $function, $html_options);
-}
-
-
+           
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_link_to_function($name, $function, $html_options= array())
 {
@@ -524,19 +537,6 @@ function jq_javascript_tag($content = null)
 }
 
 
-/***  This is a wrapper for the JavascriptHelper function  ***/
-function jq_end_javascript_tag()  
-{
-  return end_javascript_tag();  
-}
-
-
-/***  This is a wrapper for the JavascriptHelper function  ***/
-function jq_end_javascript_tag()  
-{
-  return end_javascript_tag();  
-}
-
 
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_javascript_cdata_section($content)
@@ -553,7 +553,14 @@ function jq_if_javascript()
 
 
 /***  This is a wrapper for the JavascriptHelper function  ***/
-function jq_end_if_javascript()
+function jq_end_javascript_tag()  
 {
-  return end_if_javascript();
-} 
+  return end_javascript_tag();  
+}
+
+
+
+
+
+
+

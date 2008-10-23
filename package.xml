@@ -32,6 +32,7 @@
   <dir name="/">
    <file name="lib/helper/jQueryHelper.php" role="data" />
    <file name="config/settings.yml" role="data" />  
+   <file name="web/js/plugins" role="data" />   
    <file name="web/js/jquery-1.2.6.js" role="data" />  
    <file name="web/js/jquery-1.2.6.min.js" role="data" />   
    <file name="web/js/jquery-1.2.6.pack.js" role="data" />  
@@ -77,7 +78,9 @@
        * yannick:  Added jq_submit_image_to_remote function
        * yannick:  Added jq_visual_effect function.
 	   * yannick:  Added jquery javascript in web
-	   * yannick:  Addeds setting.yml for jquery_path
+	   * yannick:  Replaced app_sfJQueryPlugin_library_path by sf_jquery_path in setting.yml
+       * Yannick : Fixed incorrect data parsing with "with" parameter in jq_remote_function.
+       * Added web folder and default jquery script.
      </notes>
    </release>
  </changelog>

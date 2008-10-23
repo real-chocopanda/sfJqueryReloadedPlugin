@@ -1,6 +1,6 @@
 = Jquery Plug-In =
 
-The `sfJqueryPlugin` offers helpers that integrate the [http://www.jquery.com/ Jquery] Javascript framework.
+The `sfJqueryReloadedPlugin` offers helpers that integrate the [http://www.jquery.com/ Jquery] Javascript framework.
 
 == Support ==
 #symfony channel @ Freenode IRC.
@@ -35,15 +35,17 @@ will get this new Jquery form:
 
   * Install the plugin
 {{{
-$ symfony plugin-install http://plugins.symfony-project.com/sfJqueryPlugin
-}}}
-  * Alternatively, if you don't have PEAR installed, you can download the latest package attached to this plugin's wiki page and extract it under your project's `plugins/` directory
-  * Download the jquery file from www.jquery.com and put it in:
-{{{
-web/js/jq/jquery.js
+$ symfony $ symfony plugin:install http://plugins.symfony-project.com/sfJqueryReloadedPlugin   
 }}}
 
-  You can choose to put the jQuery library somewhere alse, but then you'll need to customize the `app_sfJQueryPlugin_library_path` setting in your `app.yml`.
+
+  * Add jquery_web_dir in setting.yml
+   [php]
+    all:
+     .settings:
+        jquery_web_dir:      /sfJqueryPlugin/js/jquery-1.2.6.min.js
+                                     
+ 
 
 == Basic syntax ==
 
@@ -74,7 +76,11 @@ Below are complete syntax for ready to use methods in the jQuery Helpers.
  * `jq_form_remote_tag($options = array(), $options_html = array())`
  * `jq_submit_to_remote($name, $value, $options = array(), $options_html = array())`
  * `jq_javascript_tag($content)`
+ * `jq_visual_effect($effect, $element_id = false, $js_options = array())` 
+ * `jq_add_plugin($options = array()`  
 
+ 
+ 
 These are the methods reconverted into jQuery functions till the `sfJqueryPlugin` last version. Future changes will integrate more functions.
 
 == Using JSON ==
@@ -91,7 +97,7 @@ http://trac.symfony-project.com/wiki/AjaxAndJSON#jsonwithoutheader and:
  * Add unit tests
  * Use `sprintf` for string manipulation
  * Implement the rest of the Javascript Helper:
-    * visual_effect
+
     * sortable_element
     * draggable_element
     * drop_receiving_element
@@ -99,6 +105,15 @@ http://trac.symfony-project.com/wiki/AjaxAndJSON#jsonwithoutheader and:
     * input_in_place_editor_tag
 
 == Changelog ==
+
+=== 2008-10-22 | 1.2.1 Stable ===   
+ * yannick:  Added BaseJavascriptHelper.php function wrapper
+ * yannick:  Added jq_button_to_remote function
+ * yannick:  Added jq_submit_image_to_remote function
+ * yannick:  Added jq_visual_effect function.
+ * yannick:  Added jquery script in web
+ * yannick:  Replaced app_sfJQueryPlugin_library_path by sf_jquery_path in setting.yml
+
 
 === Trunk ===
 

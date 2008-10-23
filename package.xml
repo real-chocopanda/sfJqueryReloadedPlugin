@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="1.5.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
- <name>sfJqueryPlugin</name>
+ <name>sfJqueryReloadedPlugin</name>
  <channel>pear.symfony-project.com</channel>
- <summary>sfJqueryPlugin offers helpers that integrate the jQuery Javascript framework.</summary>
+ <summary>sfJqueryReloadedPlugin offers helpers that integrate the jQuery Javascript framework.</summary>
  <description>Easy integration of jQuery</description>
  <lead>
   <name>Fourat ZOUARI</name>
@@ -16,11 +16,11 @@
   <email>yannick.gauthier@gmail.com</email>
   <active>yes</active>
  </lead> 
- <date>2008-10-23</date>
- <time>23:00:00</time>
+ <date>2008-10-22</date>
+ <time>21:00:00</time>
  <version>
-  <release>1.2.4</release>
-  <api>1.2.4</api>
+  <release>1.2.1</release>
+  <api>1.2.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -32,7 +32,7 @@
   <dir name="/">
    <file name="lib/helper/jQueryHelper.php" role="data" />
    <file name="config/settings.yml" role="data" />  
-   <file name="web/js/plugins" role="data" />   
+   <file name="web/js/plugins/.sf" role="data" />   
    <file name="web/js/jquery-1.2.6.js" role="data" />  
    <file name="web/js/jquery-1.2.6.min.js" role="data" />   
    <file name="web/js/jquery-1.2.6.pack.js" role="data" />  

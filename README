@@ -35,17 +35,21 @@ will get this new Jquery form:
 
   * Install the plugin
 {{{
-$ symfony $ symfony plugin:install http://plugins.symfony-project.com/sfJqueryReloadedPlugin   
+$ symfony $ symfony plugin:install sfJqueryReloadedPlugin   
 }}}
 
 
   * Add jquery_web_dir in setting.yml
-   [php]
+{{{   
     all:
      .settings:
         jquery_web_dir:      /sfJqueryPlugin/js/jquery-1.2.6.min.js
-                                     
- 
+}}}                                
+
+If you are under Microsoft Windows, you also have to manually copy the {{{./web}}} 
+directory of the plugin in the {{{%SF_ROOT_DIR%/web}}} directory of your project
+and rename it to {{{sfJqueryReloadedPlugin}}}.
+
 
 == Basic syntax ==
 

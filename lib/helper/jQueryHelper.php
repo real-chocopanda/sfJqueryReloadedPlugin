@@ -4,23 +4,32 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
 
 /**
 * @desc  Load jquery library in header
-* 
+* tom@punkave.com: sfJqueryReloadedPlugin not sfJqueryPlugin.
+* Also, sf_jquery_web_dir wasn't being treated as a directory. 
 */
 
-
-sfContext::getInstance()->getResponse()->addJavascript(sfConfig::get('sf_jquery_web_dir', '/sfJqueryPlugin/js/jquery-1.2.6.min.js'), 'first');
-
+$path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . 
+  "/" . sfConfig::get('sf_jquery_core', 'jquery-1.3.1.min.js');
+sfContext::getInstance()->getLogger()->info("js path is $path");
+sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
 
 /**
  * Add a jQuery Plugin on the head DOM after the jQuery call
- * The default directory is jq/plugins/
  *
  * Examples:
  *   <?php echo jq_add_plugin(array('plugin1', 'plugin2')) ?>
+ *
+ * tom@punkave.com: corrected path
  */
 function jq_add_plugin($options = array()) {
+    // tom@punkave.com: with a singular name (jq_add_plugin), this function
+    // really should accept a non-array argument
+    if (!is_array($options))
+    {
+      $options = array($options);
+    }
     foreach ( $options as $o ) {
-        sfContext::getInstance ()->getResponse ()->addJavascript (sfConfig::get('sf_jquery_web_dir', '/sfJqueryPlugin/js/') .'plugins/' . $o );
+        sfContext::getInstance ()->getResponse ()->addJavascript (sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin/js') . "/plugins/$o");
     }
 }
          
@@ -501,6 +510,64 @@ function jq_submit_image_to_remote($name, $source, $options = array(), $options_
   return tag('input', $options_html, false);
 }
 
+  /**
+   * Makes the elements matching the jQuery selector '$selector' 
+   * sortable by drag-and-drop and makes an AJAX call whenever the sort order 
+   * has changed. By default, the action called gets the serialized sortable
+   * element as parameters.
+   *
+   * Example:
+   *   <php echo sortable_element("#foo", array(
+   *      'url' => '@order',
+   *   )) ?>
+   *
+   * In the example, the action gets a 'foo' array parameter
+   * containing the values of the ids of elements the sortable consists
+   * of, in the current order.
+   *
+   * Additional options can be passed in the $options associative array
+   * and will be sent to jquery as parameters. For example:
+   * 'handle' => 'span' specifies that span elements within the
+   * sortable element are the element the user actually clicks on
+   *  (although entire first-generation child elements of the 
+   * sortable element get reordered as a result).
+   *
+   * Added by tom@punkave.com.
+   */
+function jq_sortable_element($selector, $options = array())
+{
+  // We need ui.sortable for this trick
+  jq_add_plugin(sfConfig::get('jquery_sortable', 
+    'jquery-ui-sortable-1.6rc6.min.js'));
+  $options = _parse_attributes($options);
+  $url = json_encode(url_for($options['url']));
+  unset($options['url']);
+  $jsonOptions = '';
+  foreach ($options as $key => $val)
+  {
+    $jsonOptions .= ", $key: " . json_encode($val);
+  }
+  $result = <<<EOM
+$(document).ready(
+  function() 
+  {
+    $("$selector").sortable(
+    { 
+      update: function(e, ui) 
+      { 
+        serial = $('$selector').sortable('serialize', {});
+        $.ajax({
+          url: $url,
+          type: 'POST',
+          data: serial
+          $jsonOptions
+        });
+      }
+    } );
+  });
+EOM;
+  return javascript_tag($result);
+}
 
 
 function _update_method($position) {

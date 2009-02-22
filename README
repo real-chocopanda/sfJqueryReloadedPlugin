@@ -1,3 +1,6 @@
+== TEMPORARILY FORKED by Tom until my changes are accepted upstream, that's
+why it's living in our repository and not on the symfony site. ==
+
 = Jquery Plug-In =
 
 The `sfJqueryReloadedPlugin` offers helpers that integrate the [http://www.jquery.com/ Jquery] Javascript framework.
@@ -82,7 +85,7 @@ Below are complete syntax for ready to use methods in the jQuery Helpers.
  * `jq_javascript_tag($content)`
  * `jq_visual_effect($effect, $element_id = false, $js_options = array())` 
  * `jq_add_plugin($options = array()`  
-
+ * `jq_sortable_element($selector, $options)` (tom@punkave.com)
  
  
 These are the methods reconverted into jQuery functions till the `sfJqueryPlugin` last version. Future changes will integrate more functions.
@@ -109,6 +112,12 @@ http://trac.symfony-project.com/wiki/AjaxAndJSON#jsonwithoutheader and:
     * input_in_place_editor_tag
 
 == Changelog ==
+
+=== Trunk ===
+
+ * tom@punkave.com (boutell): jQuery 1.3.1 (needed for latest ui.sortable)
+ * tom@punkave.com (boutell): implemented jq_sortable_element
+ * tom@punkave.com (boutell): fixed bugs in sf_jquery_web_dir, fixed jq_add_plugin so that ui.sortable can be successfully added
 
 === 2008-10-22 | 1.2.1 Stable ===   
  * yannick:  Added BaseJavascriptHelper.php function wrapper

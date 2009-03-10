@@ -110,12 +110,15 @@ http://trac.symfony-project.com/wiki/AjaxAndJSON#jsonwithoutheader and:
 
 == Changelog ==
 
-=== Trunk ===
+=== 2009-03-10 1.2.3 ===
 
- * tom@punkave.com (boutell): jQuery 1.3.1 (needed for latest ui.sortable)
- * tom@punkave.com (boutell): implemented jq_sortable_element
- * tom@punkave.com (boutell): fixed bugs in sf_jquery_web_dir, fixed jq_add_plugin so that ui.sortable can be successfully added
-
+ * boutell: upgraded to jQuery 1.3.x
+ * boutell: ui.sortable for jq_sortable_element
+ * boutell: fixed bugs in directory handling options in settings.yml
+ * boutell: fixed bug in plugin loader
+ * boutell: implemented jq_sortable element
+ * boutell: fixed incorrect and undesired quoting of 'with' parameter to jq_remote_function (thanks to JoeZ99)
+ 
 === 2008-10-22 | 1.2.1 Stable ===   
  * yannick:  Added BaseJavascriptHelper.php function wrapper
  * yannick:  Added jq_button_to_remote function

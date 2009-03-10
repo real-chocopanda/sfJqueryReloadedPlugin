@@ -271,7 +271,9 @@ function jq_remote_function($options)
   // Is it a form submitting
   if (isset($options['form'])) $formData = 'jQuery(this).serialize()';
   elseif (isset($options['submit'])) $formData = '{\'#'.$options['submit'].'\'}.serialize()';
-  elseif (isset($options['with'])) $formData = '\''.$options['with'].'\''; 
+  // boutell and JoeZ99: 'with' should not be quoted, it's not useful
+  // that way, see the Symfony documentation for the original remote_function
+  elseif (isset($options['with'])) $formData = $options['with'];
 
   // build the function
   $function = "jQuery.ajax({";

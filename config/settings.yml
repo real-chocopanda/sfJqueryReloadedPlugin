@@ -14,3 +14,6 @@ all:
 
     # tom@punkave.com: This is within jquery_web_dir/plugins. 
     jquery_sortable: jquery-ui-sortable-1.6rc2.min.js   
+
+    # bruno.adele@jesuislibre.org This is within jquery_web_dir/plugins.
+    jquery_autocomplete: jquery.autocomplete-1.0.2.min.js

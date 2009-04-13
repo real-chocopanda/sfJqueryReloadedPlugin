@@ -6,11 +6,14 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
  * @desc  Load jquery library in header
  * tom@punkave.com: sfJqueryReloadedPlugin not sfJqueryPlugin.
  * Also, sf_jquery_web_dir wasn't being treated as a directory.
+ *
+ * tom@punkave.com 20090413: be consistent with the way global
+ * settings.yml files work, it should always be the webdir, not the /js/
+ * subfolder of the webdir.
  */
 
 $path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
   '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.1.min.js');
-sfContext::getInstance()->getLogger()->info("js path is $path");
 sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
 
 /**
@@ -20,7 +23,7 @@ sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
  *   <?php echo jq_add_plugin(array('plugin1', 'plugin2')) ?>
  *
  * tom@punkave.com: corrected path
- */
+ /*/
 function jq_add_plugin($options = array()) {
 	// tom@punkave.com: with a singular name (jq_add_plugin), this function
 	// really should accept a non-array argument

@@ -596,7 +596,7 @@ EOM;
  *                 auto complete javascript tags
  */
 function jq_input_auto_complete_tag($name, $value, $url, $tag_options = array(), $completion_options = array()) {
-	// We need ui.sortable for this trick
+	// We need ui.autocomplete for this trick
 	jq_add_plugin(sfConfig::get('jquery_autocomplete','jquery.autocomplete-1.0.2.min.js'));
 
 	$tag_options = _convert_options($tag_options);

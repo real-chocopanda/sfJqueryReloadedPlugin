@@ -17,13 +17,54 @@ $path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
 sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
 
 /**
- * Add a jQuery Plugin on the head DOM after the jQuery call
+ * Add jQuery plugins by name rather than by filename so that you don't have
+ * to worry about what the current version is. Currently supported:
  *
- * Examples:
- *   <?php echo jq_add_plugin(array('plugin1', 'plugin2')) ?>
+ * sortable
+ * autocomplete
  *
- * tom@punkave.com: corrected path
+ * This is useful to app developers when the normal "just in time" approach 
+ * doesn't work. For instance, if you are making helper calls in layout.php (or
+ * components invoked by it...) and you have already called get_javascripts, 
+ * it's too late to rely on the automatic calls to jq_add_plugin in the 
+ * various helpers. So call this early instead, right after use_helper.
+ *
+ * Example:
+ *   <?php echo jq_add_plugins_by_name(array('sortable', 'autocomplete')) ?>
+ *
  /*/
+
+function jq_add_plugins_by_name($args = array()) {
+  /* 
+   * When adding the capability to use a new plugin you must
+   * extend this array, and keep it up to date when you update to
+   * a new version. You must also update the plugin's
+   * default config/settings.yml file
+   */
+
+  $plugins = array(
+    'sortable' => 'jquery-ui-sortable-1.6rc6.min.js',
+    'autocomplete' => 'jquery.autocomplete-1.0.2.min.js'
+  );
+
+  foreach ($args as $name)
+  {
+    if (!isset($plugins[$name]))
+    {
+      throw new Exception("Unknown jQuery plugin name $name");
+    }
+    $filename = sfConfig::get("sf_jquery_$name", $plugins[$name]);
+    $filename = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$filename";
+    $key = "sf_jquery_$name";
+		sfContext::getInstance()->getResponse()->addJavascript($filename);
+  }
+}
+
+
+/*
+ * Backwards compatibility only. Don't use this.
+ */
+
 function jq_add_plugin($options = array()) {
 	// tom@punkave.com: with a singular name (jq_add_plugin), this function
 	// really should accept a non-array argument
@@ -32,7 +73,8 @@ function jq_add_plugin($options = array()) {
 		$options = array($options);
 	}
 	foreach ( $options as $o ) {
-		sfContext::getInstance ()->getResponse ()->addJavascript (sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$o");
+    $file = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$o";
+		sfContext::getInstance ()->getResponse ()->addJavascript ($file);
 	}
 }
 
@@ -542,8 +584,7 @@ function jq_submit_image_to_remote($name, $source, $options = array(), $options_
 function jq_sortable_element($selector, $options = array())
 {
 	// We need ui.sortable for this trick
-	jq_add_plugin(sfConfig::get('jquery_sortable',
-    'jquery-ui-sortable-1.6rc6.min.js'));
+  jq_add_plugins_by_name(array("sortable"));
 	$options = _parse_attributes($options);
 	$url = json_encode(url_for($options['url']));
 	unset($options['url']);
@@ -597,7 +638,7 @@ EOM;
  */
 function jq_input_auto_complete_tag($name, $value, $url, $tag_options = array(), $completion_options = array()) {
 	// We need ui.autocomplete for this trick
-	jq_add_plugin(sfConfig::get('jquery_autocomplete','jquery.autocomplete-1.0.2.min.js'));
+  jq_add_plugins_by_name(array("autocomplete"));
 
 	$tag_options = _convert_options($tag_options);
 	$comp_options = _convert_options($completion_options);

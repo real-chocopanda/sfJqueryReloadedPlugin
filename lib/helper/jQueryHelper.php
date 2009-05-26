@@ -43,7 +43,10 @@ function jq_add_plugins_by_name($args = array()) {
    */
 
   $plugins = array(
-    'sortable' => 'jquery-ui-sortable-1.6rc6.min.js',
+    // Backwards compatibility
+    'sortable' => 'jquery-ui-1.7.1.custom.min.js',
+    
+    'ui' => 'jquery-ui-1.7.1.custom.min.js',
     'autocomplete' => 'jquery.autocomplete-1.0.2.min.js'
   );
 
@@ -583,36 +586,36 @@ function jq_submit_image_to_remote($name, $source, $options = array(), $options_
  */
 function jq_sortable_element($selector, $options = array())
 {
-	// We need ui.sortable for this trick
-  jq_add_plugins_by_name(array("sortable"));
+	// We need ui for this trick. It's now just ui, not sortable; for simplicity
+	// we have a catch-all ui package, which is minimized to contain only the 
+	// features that actually get used by the plugin. If you want fewer features,
+	// or more features, from jQuery ui then get your own minimized package download
+	// from the jquery ui site
+  jq_add_plugins_by_name(array("ui"));
 	$options = _parse_attributes($options);
-	$url = json_encode(url_for($options['url']));
-	unset($options['url']);
-	$jsonOptions = '';
-	foreach ($options as $key => $val)
-	{
-		$jsonOptions .= ", $key: " . json_encode($val);
-	}
+	$options['url'] = url_for($options['url']);
+  $options['type'] = 'POST';
+  $selector = json_encode($selector);
+  $options = json_encode($options);	
+	
 	$result = <<<EOM
 $(document).ready(
   function() 
   {
-    $("$selector").sortable(
+    $($selector).sortable(
     { 
       update: function(e, ui) 
       { 
-        serial = $('$selector').sortable('serialize', {});
-        $.ajax({
-          url: $url,
-          type: 'POST',
-          data: serial
-          $jsonOptions
-        });
+        <?php // Should always use jQuery here never $ ?>
+        var serial = jQuery($selector).sortable('serialize', {});
+        var options = $options;
+        options['data'] = serial;
+        $.ajax(options);
       }
     } );
   });
 EOM;
-          return javascript_tag($result);
+  return javascript_tag($result);
 }
 
 
@@ -684,6 +687,72 @@ function jq_input_auto_complete_tag($name, $value, $url, $tag_options = array(),
 	return $javascript;
 }
 
+/**
+ * Makes the elements matching the selector $selector draggable.
+ *
+ * Example:
+ *   <?php echo jq_draggable_element('ul.mydraggables li', array(
+ *      'revert' => true,
+ *   )) ?>
+ *
+ * You can change the behaviour with various options, see
+ * http://script.aculo.us for more documentation.
+ */
+function jq_draggable_element($selector, $options = array())
+{
+	// We need ui for this trick
+  jq_add_plugins_by_name(array("ui"));
+	$options = json_encode(_parse_attributes($options));  
+	$selector = json_encode($selector);
+  return javascript_tag("jQuery($selector).draggable($options)");
+}
+
+/**
+ * Makes the element with the DOM ID specified by '$element_id' receive
+ * dropped draggable elements (created by 'draggable_element()') and make an AJAX call.
+ * By default, the action called gets the DOM ID of the element as parameter.
+ *
+ * Example:
+ *   <?php drop_receiving_element('my_cart', array(
+ *      'url' => 'cart/add',
+ *   )) ?>
+ *
+ * You can change the behaviour with various options, see
+ * http://script.aculo.us for more documentation.
+ */
+function jq_drop_receiving_element($selector, $options = array())
+{
+  jq_add_plugins_by_name(array("ui"));
+  if (!isset($options['with']))
+  {
+    $options['with'] = "'id=' + encodeURIComponent(element.id)";
+  }
+  if (!isset($options['drop']))
+  {
+    $options['drop'] = "function(element){".jq_remote_function($options)."}";
+  }
+
+  // For backwards compatibility with prototype
+  if (isset($options['hoverclass']))
+  {
+    $options['hoverClass'] = $options['hoverclass'];
+  }
+  $options['hoverClass'] = json_encode('hoverclass');
+  
+  foreach (jq_get_ajax_options() as $key)
+  {
+    unset($options[$key]);
+  }
+
+  if (isset($options['accept']))
+  {
+    $options['accept'] = json_encode($options['accept']);
+  }
+  $options = jq_options_for_javascript($options);
+  $selector = json_encode($selector);
+  return javascript_tag("jQuery($selector).droppable($options);");
+}
+
 function _update_method($position) {
 	// Updating method
 	$updateMethod = 'html';
@@ -739,8 +808,17 @@ function jq_end_javascript_tag()
 	return end_javascript_tag();
 }
 
+function _options_for_javascript($options)
+{
+  $opts = array();
+  foreach ($options as $key => $value)
+  {
+    $opts[] = "$key:$value";
+  }
+  sort($opts);
 
-
+  return '{'.join(', ', $opts).'}';
+}
 
 
 

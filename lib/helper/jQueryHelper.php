@@ -32,7 +32,7 @@ sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
  * Example:
  *   <?php echo jq_add_plugins_by_name(array('sortable', 'autocomplete')) ?>
  *
- /*/
+ */
 
 function jq_add_plugins_by_name($args = array()) {
   /* 

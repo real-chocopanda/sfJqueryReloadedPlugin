@@ -765,13 +765,35 @@ function _update_method($position) {
 	return $updateMethod;
 }
 
-/***  This is a wrapper for the JavascriptHelper function  ***/
-function jq_link_to_function($name, $function, $html_options= array())
+/***  This should be just a wrapper for the JavascriptBaseHelper link_to_function call, 
+    but right now it is a copy that contains correct support for 'confirm' that 
+    doesn't break IE or produce invalid HTML. It will make sense to turn this back 
+    into a simple wrapper once it is fixed in a Symfony release. See:
+    
+    http://trac.symfony-project.org/ticket/4152 ***/
+    
+function jq_link_to_function($name, $function, $html_options = array())
 {
-	return link_to_function($name, $function, $html_options);
+  $html_options = _parse_attributes($html_options);
+
+  $html_options['href'] = isset($html_options['href']) ? $html_options['href'] : '#';
+  if ( isset($html_options['confirm']) )
+  {
+    $confirm = escape_javascript($html_options['confirm']);
+    $html_options['onclick'] = "if(confirm('$confirm')){ $function;}; return false;";
+    // tom@punkave.com: without this we get a confirm attribute, which breaks confirm() in IE
+    // (we could call window.confirm, but there is no reason to have the
+    // nonstandard confirm attribute) 
+    unset($html_options['confirm']);
+  }
+  else
+  {
+    $html_options['onclick'] = $function.'; return false;';
+  }
+
+  return content_tag('a', $name, $html_options);
 }
-
-
+    
 /***  This is a wrapper for the JavascriptHelper function  ***/
 function jq_button_to_function($name, $function, $html_options = array())
 {

@@ -605,7 +605,7 @@ $(document).ready(
     $($selector).sortable(
     { 
       update: function(e, ui) 
-      { 
+      {
         var serial = jQuery($selector).sortable('serialize', {});
         var options = $options;
         options['data'] = serial;

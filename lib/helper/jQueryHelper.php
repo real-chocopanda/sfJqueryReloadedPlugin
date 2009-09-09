@@ -13,7 +13,7 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
  */
 
 $path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
-  '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.1.min.js');
+  '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.2.min.js');
 sfContext::getInstance()->getResponse()->addJavascript($path, 'first');
 
 /**
@@ -45,9 +45,8 @@ function jq_add_plugins_by_name($args = array()) {
   $plugins = array(
     // Backwards compatibility
     'sortable' => 'jquery-ui-1.7.2.custom.min.js',
-    
     'ui' => 'jquery-ui-1.7.2.custom.min.js',
-    'autocomplete' => 'jquery.autocomplete-1.0.2.min.js'
+    'autocomplete' => 'jquery.autocomplete.min.js'
   );
 
   foreach ($args as $name)

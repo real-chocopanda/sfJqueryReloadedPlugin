@@ -27,7 +27,8 @@ all:
     jquery_ui: jquery-ui-1.7.2.custom.min.js   
 
     # bruno.adele@jesuislibre.org This is within jquery_web_dir/js/plugins.
-    jquery_autocomplete: jquery.autocomplete-1.0.2.min.js
+    # http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
+    jquery_autocomplete: jquery.autocomplete.min.js
 
     # jquery_sortable maps to jquery_ui for backwards compatibility with code that
     # explicitly loads the former by name

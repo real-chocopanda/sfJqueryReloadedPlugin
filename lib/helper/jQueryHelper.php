@@ -321,6 +321,15 @@ function jq_remote_function($options)
 	// boutell and JoeZ99: 'with' should not be quoted, it's not useful
 	// that way, see the Symfony documentation for the original remote_function
 	elseif (isset($options['with'])) $formData = $options['with'];
+	// Is it a link with csrf protection
+	elseif(isset($options['csrf']) && $options['csrf'] == '1')
+	{
+		$form = new sfForm();
+  		if ($form->isCSRFProtected())
+  		{
+  			$formData = '{'.$form->getCSRFFieldName().': \''.$form->getCSRFToken().'\'}';
+  		}
+	}
 
 	// build the function
 	$function = "jQuery.ajax({";

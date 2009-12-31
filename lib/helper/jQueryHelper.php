@@ -12,8 +12,11 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
  * subfolder of the webdir.
  */
 
-$jq_path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
-  '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.2.min.js');
+if (!$jq_path = sfConfig::get('sf_jquery_path'))
+{
+  $jq_path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
+    '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.2.min.js');
+}
 sfContext::getInstance()->getResponse()->addJavascript($jq_path, 'first');
 
 /**
@@ -49,16 +52,21 @@ function jq_add_plugins_by_name($args = array()) {
     'autocomplete' => 'jquery.autocomplete.min.js'
   );
 
+  $pluginPaths = sfConfig::get('sf_jquery_plugin_paths');
   foreach ($args as $name)
   {
     if (!isset($plugins[$name]))
     {
       throw new Exception("Unknown jQuery plugin name $name");
     }
-    $filename = sfConfig::get("sf_jquery_$name", $plugins[$name]);
-    $filename = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$filename";
-    $key = "sf_jquery_$name";
-		sfContext::getInstance()->getResponse()->addJavascript($filename);
+    if (!isset($pluginPaths[$name]))
+    {
+      $filename = sfConfig::get("sf_jquery_$name", $plugins[$name]);
+      $filename = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') . "/js/plugins/$filename";
+    } else {
+      $filename = $pluginPaths[$name];
+    }
+    sfContext::getInstance()->getResponse()->addJavascript($filename);
   }
 }
 
@@ -848,7 +856,3 @@ function _options_for_javascript($options)
 
   return '{'.join(', ', $opts).'}';
 }
-
-
-
-

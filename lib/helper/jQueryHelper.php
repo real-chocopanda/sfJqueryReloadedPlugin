@@ -15,7 +15,7 @@ require_once(sfConfig::get('sf_symfony_lib_dir') . '/helper/JavascriptBaseHelper
 if (!$jq_path = sfConfig::get('sf_jquery_path'))
 {
   $jq_path = sfConfig::get('sf_jquery_web_dir', '/sfJqueryReloadedPlugin') .
-    '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.3.2.min.js');
+    '/js/' . sfConfig::get('sf_jquery_core', 'jquery-1.4.1.min.js');
 }
 sfContext::getInstance()->getResponse()->addJavascript($jq_path, 'first');
 

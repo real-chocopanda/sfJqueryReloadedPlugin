@@ -126,7 +126,7 @@
     * boutell: stray PHP comment in JS code that broke IE removed
     * boutell: bundled UI js is latest version, supporting chrome is included
     * jQuery updated to 1.3.2
-    * jQuery UI is version 1.7.2
+    * jQuery UI is version 1.7.3
     * A single UI plugin, with backwards compatibility support for loading it as 'sortable'
     * Cleanup to use json_encode in more cases
     * jq_add_plugins_by_name supersedes sf_add_plugin (kept but deprecated)

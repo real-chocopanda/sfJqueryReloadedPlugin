@@ -560,7 +560,7 @@ function jq_submit_image_to_remote($name, $source, $options = array(), $options_
 	}
 
 	$options_html['type'] = 'image';
-	$options_html['onclick'] = jq_remote_function($options).' return false;';
+	$options_html['onclick'] = jq_remote_function($options).'; return false;';
 	$options_html['name'] = $name;
 	$options_html['src'] = image_path($source);
 

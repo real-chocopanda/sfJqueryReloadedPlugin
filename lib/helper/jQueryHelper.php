@@ -344,6 +344,7 @@ function jq_remote_function($options)
 	$function .= 'type:\''.$method.'\'';
 	$function .= ',dataType:\'' . $dataType . '\'';
 	if (isset($type)) $function .= ',async:'.$type;
+	if (isset($cache)) $function .= ',cache:'.$cache;
 	if (isset($formData)) $function .= ',data:'.$formData;
 	if (isset($update_success) and !isset($callback_success)) $function .= ',success:function(data, textStatus){jQuery(\''.$update_success.'\').'.$updateMethod.'(data);}';
 	if (isset($update_failure)) $function .= ',error:function(XMLHttpRequest, textStatus, errorThrown){'.$update_failure.'}';

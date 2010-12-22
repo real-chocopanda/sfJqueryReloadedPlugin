@@ -375,7 +375,7 @@ function jq_remote_function($options)
 		}
 	}
 
-	return $function;
+	return $function.( (isset($options['stop_propagation']) && $options['stop_propagation']) ? '; if(event && event.stopPropagation) {event.stopPropagation();} else {window.event.cancelBubble = true;}' : '');
 }
 
 /**

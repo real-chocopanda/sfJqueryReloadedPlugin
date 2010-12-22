@@ -298,7 +298,14 @@ function jq_remote_function($options)
 	if (isset($options['loading'])) $callback_loading = $options['loading'];
 	if (isset($options['complete'])) $callback_complete = $options['complete'];
 	if (isset($options['success'])) $callback_success = $options['success'];
-
+	
+	if (isset($options['cache'])) { 
+		if($options['cache']){
+			$cache = 'true';
+		} else {
+			$cache = 'false';
+		}
+	}
 	$execute = 'false';
 	if ((isset($options['script'])) && ($options['script'] == '1')) $execute = 'true';
 
